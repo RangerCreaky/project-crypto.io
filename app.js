@@ -3,7 +3,6 @@ const app = express();
 const path = require('path')
 const session=require('express-session')
 const ejsMate = require('ejs-mate')
-const Joi = require('joi')
 const flash = require('connect-flash');
 const UserSchema = require('./schema/UserSchema');
 
@@ -13,24 +12,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local');
 
 
-const sessionConfig = {
-    secret: 'thisshouldbeabettersecret!',
-    resave: false,
-    saveUninitialized: true,
-   
-}
 
-
-
-app.use(session(sessionConfig))
-app.use(flash());
-
-app.use(passport.initialize());
-app.use(passport.session());
-passport.use(new LocalStrategy(UserSchema.authenticate()));
-
-passport.serializeUser(UserSchema.serializeUser());
-passport.deserializeUser(UserSchema.deserializeUser());
 
 
 
@@ -38,7 +20,7 @@ passport.deserializeUser(UserSchema.deserializeUser());
 
 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/yelp-camp', {
+mongoose.connect('mongodb://localhost:27017/fake-data', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 
@@ -52,7 +34,22 @@ db.once("open", () => {
 
 
 
+const sessionConfig = {
+    secret: 'thisshouldbeabettersecret!',
+    resave: false,
+    saveUninitialized: true,
 
+}
+
+app.use(session(sessionConfig))
+app.use(flash());
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(UserSchema.authenticate()));
+
+passport.serializeUser(UserSchema.serializeUser());
+passport.deserializeUser(UserSchema.deserializeUser());
 
 
 app.engine('ejs', ejsMate);
@@ -72,6 +69,11 @@ app.use((req, res, next) => {
     res.locals.error = req.flash('error');
     next();
 })
+
+
+
+
+
 
 
 //routes
