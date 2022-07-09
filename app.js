@@ -1,12 +1,12 @@
 const express = require('express');
 const app = express();
 const path = require('path')
-const session=require('express-session')
+const session = require('express-session')
 const ejsMate = require('ejs-mate')
 const flash = require('connect-flash');
 const UserSchema = require('./schema/UserSchema');
 const methodOverride = require('method-override');
-const signup= require('./routes/signup');
+const signup = require('./routes/signup');
 const login = require('./routes/login');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
@@ -16,7 +16,7 @@ const LocalStrategy = require('passport-local');
 
 
 
- 
+
 //connecting database
 
 const mongoose = require('mongoose');
@@ -70,7 +70,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.use((req, res, next) => {
-    
+
     res.locals.currentUser = req.user;
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
@@ -84,8 +84,12 @@ app.use((req, res, next) => {
 
 
 //routes
+app.get("/", (req, res) => {
+    res.render('landingPage');
+});
 
-app.use('/signup',signup);
+
+app.use('/signup', signup);
 app.use('/login', login);
 
 
